@@ -5,13 +5,14 @@ import {
 import firebase, { authenticateAnonymously } from './firebase';
 import './App.css';
 import CreateGame from './CreateGame';
-import Game from './Game';
+import LoadGame from './LoadGame';
 
 
 function App() {
   const [userId, setUserId] = useState();
   const [userName, setUserName] = useState();
   const [path, setPath] = useState();
+  const [turn, setTurn] = useState();
   const history = useHistory();
   const location = useLocation();
 
@@ -26,10 +27,16 @@ function App() {
       console.log('Please enter a username');
     } else {
       history.push(`/${path}`);
+      let newTurn = Math.floor(Math.random() * Math.floor(2));
+      setTurn(newTurn);
+
       firebase.firestore().collection('games').doc().set({
         gameId: path,
-        uId: userId,
-        user: userName,
+        playerOne: userId,
+        playerTwo: '',
+        userOne: userName,
+        userTwo: '',
+        userTurn: newTurn,
       });
     }
   };
@@ -75,7 +82,7 @@ function App() {
           />
         </Route>
         <Route path={`/${path}`} exact>
-          <Game />
+          <LoadGame turn={turn} setTurn={setTurn} gameCode={path} userId={userId} />
         </Route>
       </Switch>
     </div>

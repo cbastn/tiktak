@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Game() {
+function Game(props) {
   return (
     <div>
-      <p>Game Screen</p>
+      <p>{props.state}</p>
     </div>
   );
 }
