@@ -8,6 +8,7 @@ function LoadGame(props) {
   const [player, setPlayer] = useState(0);
   const [emptyPlayerTwo, setEmptyPlayerTwo] = useState(false);
   const [docId, setDocId] = useState('');
+
   useEffect(() => {
     firebase.firestore().collection('games').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -29,9 +30,9 @@ function LoadGame(props) {
   function checkPlayers() {
     console.log(player);
     if (player === 0) {
-      return <SignUp userId={props.userId} playerEmpty={emptyPlayerTwo} docId={docId} setPlayer={setPlayer}/>;
+      return <SignUp userId={props.userId} playerEmpty={emptyPlayerTwo} docId={docId} setPlayer={setPlayer} />;
     }
-    return <Game state={player} />;
+    return <Game player={player} docId={docId} turn={props.turn} />;
   }
   return (
     <div>
