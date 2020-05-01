@@ -37,6 +37,10 @@ function App() {
         userOne: userName,
         userTwo: '',
         userTurn: newTurn,
+        firstTurn: newTurn,
+        slots: Array(9).fill(3, 0, 9),
+        moveX:[],
+        moveO:[],
       });
     }
   };

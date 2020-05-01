@@ -3,8 +3,10 @@ import firebase from 'firebase';
 import Square from './Square';
 
 function Game(props) {
-  const [turn, setTurn] = useState(props.turn);
-  const [move, setMove] = useState([]);
+  const [turn, setTurn] = useState();
+  const [moveX, setMoveX] = useState([]);
+  const [moveO, setMoveO] = useState([]);
+  const [slots, setSlots] = useState([]);
   const winCondition = [
     [0, 1, 2],
     [3, 4, 5],
@@ -15,42 +17,55 @@ function Game(props) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  const slots = Array(9).fill(0, 0, 9);
-  /* useEffect(() => {
+
+  // let slots = Array(9).fill(3,0,9);
+
+  useEffect(() => {
+    firebase.firestore().collection('games').doc(props.docId).get()
+      .then((doc) => {
+        setTurn(doc.data().userTurn);
+        setSlots(doc.data().slots);
+      });
+  }, []);
+
+  useEffect(() => {
     firebase.firestore().collection('games').doc(props.docId).onSnapshot((doc) => {
-      console.log(doc.data().userTurn);
       setTurn(doc.data().userTurn);
+      setSlots(doc.data().slots);
+      setMoveX(doc.data().moveX);
+      setMoveO(doc.data().moveO);
     });
-  },[turn]);
-  function handleTurn() {
+  }, [turn]);
+  function handleTurn(index) {
+    const changedSlots = [...slots];
+
     if (props.player === 1 && turn === 0) {
+      changedSlots[index] = 0;
+      const changeMoveX = [...moveX, index];
+      checkWin(changeMoveX);
       firebase.firestore().collection('games').doc(props.docId).update({
         userTurn: 1,
+        slots: changedSlots,
+        moveX: changeMoveX,
       });
     } else if (props.player === 2 && turn === 1) {
+      changedSlots[index] = 1;
+      const changeMoveO = [...moveO];
+      checkWin(changeMoveO);
       firebase.firestore().collection('games').doc(props.docId).update({
         userTurn: 0,
+        slots: changedSlots,
+        moveO: changeMoveO,
       });
-    }else {
+    } else {
       console.log('its not your turn');
     }
-  }; */
-  function handleTurn(squareNumber) {
-    if (props.player === 1 && turn === 0) {
-      setTurn(1);
-      setMove((move) => [...move, squareNumber]);
-    } else if (props.player === 2 && turn === 1) {
-      setTurn(0);
-      setMove((move) => [...move, squareNumber]);
-    }
-    console.log(move);
   }
-  function checkWin() {
-    const moves = [0, 1, 6];
-
-    const result = winCondition.some((combination) => combination.every((number) => moves.includes(number)));
+  function checkWin(playerMoves) {
+    const result = winCondition.some((combination) => combination.every((number) => playerMoves.includes(number)));
     console.log(result);
   }
+
   return (
     <div>
       <p>{turn}</p>
@@ -58,7 +73,8 @@ function Game(props) {
       <button onClick={() => handleTurn(1)}>Change Turn</button>
       <button onClick={() => checkWin()}>Check Win</button>
       <div id="board">
-        {slots.map((square, index) => <Square key={index} index={index}/>)}
+        {/* eslint-disable-next-line max-len */}
+        {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} />)}
       </div>
     </div>
   );

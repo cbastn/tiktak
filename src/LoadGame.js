@@ -18,9 +18,11 @@ function LoadGame(props) {
           setPlayer(2);
         }
         if (doc.data().gameId === props.gameCode && doc.data().playerTwo === '') {
-          setDocId(doc.id);
           setEmptyPlayerTwo(true);
           console.log('player two is empty');
+        }
+        if (doc.data().gameId === props.gameCode) {
+          setDocId(doc.id);
         }
       });
       setLoading(false);

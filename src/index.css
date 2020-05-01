@@ -17,3 +17,10 @@ code {
   width: 2em;
   height: 2em;
 }
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
