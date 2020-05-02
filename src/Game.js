@@ -4,6 +4,7 @@ import Square from './Square';
 
 function Game(props) {
   const [turn, setTurn] = useState();
+  const [firstTurn, setFirstTurn] = useState();
   const [moveX, setMoveX] = useState([]);
   const [moveO, setMoveO] = useState([]);
   const [slots, setSlots] = useState([]);
@@ -24,6 +25,7 @@ function Game(props) {
     firebase.firestore().collection('games').doc(props.docId).get()
       .then((doc) => {
         setTurn(doc.data().userTurn);
+        setFirstTurn(doc.data().firstTurn);
         setSlots(doc.data().slots);
       });
   }, []);
@@ -64,17 +66,23 @@ function Game(props) {
   function checkWin(playerMoves) {
     const result = winCondition.some((combination) => combination.every((number) => playerMoves.includes(number)));
     console.log(result);
+    // if result add point to scoreboard
   }
-
+  function resetGame() {
+    firebase.firestore().collection('games').doc(props.docId).update({
+      slots: Array(9).fill(3, 0, 9),
+      moveX: [],
+      moveO: [],
+    });
+  }
   return (
     <div>
-      <p>{turn}</p>
       <p>{props.player}</p>
-      <button onClick={() => handleTurn(1)}>Change Turn</button>
-      <button onClick={() => checkWin()}>Check Win</button>
+
+      <button onClick={() => resetGame()}>Reset Game</button>
       <div id="board">
         {/* eslint-disable-next-line max-len */}
-        {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} />)}
+        {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>
     </div>
   );
