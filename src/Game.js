@@ -19,8 +19,6 @@ function Game(props) {
     [2, 4, 6],
   ];
 
-  // let slots = Array(9).fill(3,0,9);
-
   useEffect(() => {
     firebase.firestore().collection('games').doc(props.docId).get()
       .then((doc) => {
@@ -80,7 +78,7 @@ function Game(props) {
       <p>{props.player}</p>
 
       <button onClick={() => resetGame()}>Reset Game</button>
-      <div id="board">
+      <div id="board" className="grid grid-cols-3  m-auto h-32 w-32">
         {/* eslint-disable-next-line max-len */}
         {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>

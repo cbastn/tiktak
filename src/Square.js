@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 
 function Square(props) {
-  let filledClass = '';
+  let filledClass = ' cell ';
   if (props.firstTurn === 0) {
     if (props.square === 0) {
-      filledClass = 'green';
+      filledClass += ' xCell bg-blue-500';
     }
     if (props.square === 1) {
-      filledClass = 'red';
+      filledClass += ' circle ';
     }
   }
   if (props.firstTurn === 1) {
     if (props.square === 1) {
-      filledClass = 'green';
+      filledClass += ' xCell ';
     }
     if (props.square === 0) {
-      filledClass = 'red';
+      filledClass += ' circle ';
     }
   }
+
   return (
-    <div onClick={() => { props.handleTurn(props.index); }} className={filledClass}>[ ]</div>
+    <div onClick={() => { props.handleTurn(props.index); }} className={filledClass}/>
   );
 }
 export default Square;

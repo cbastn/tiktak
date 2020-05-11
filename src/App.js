@@ -10,7 +10,7 @@ import LoadGame from './LoadGame';
 
 function App() {
   const [userId, setUserId] = useState();
-  const [userName, setUserName] = useState();
+  const [userName, setUserName] = useState('Player One');
   const [path, setPath] = useState();
   const [turn, setTurn] = useState();
   const history = useHistory();
@@ -27,7 +27,7 @@ function App() {
       console.log('Please enter a username');
     } else {
       history.push(`/${path}`);
-      let newTurn = Math.floor(Math.random() * Math.floor(2));
+      const newTurn = Math.floor(Math.random() * Math.floor(2));
       setTurn(newTurn);
 
       firebase.firestore().collection('games').doc().set({
@@ -39,8 +39,8 @@ function App() {
         userTurn: newTurn,
         firstTurn: newTurn,
         slots: Array(9).fill(3, 0, 9),
-        moveX:[],
-        moveO:[],
+        moveX: [],
+        moveO: [],
       });
     }
   };
@@ -74,7 +74,7 @@ function App() {
     }
   }, [location.pathname]);
   return (
-    <div className="App">
+    <div className="App bg-black text-white h-screen flex flex-col justify-center">
       <Switch>
         <Route path="/" exact>
           <CreateGame
