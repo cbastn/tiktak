@@ -1,0 +1,73 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+*,*::after,*::before {
+    box-sizing: border-box;
+}
+.cell:first-child{
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+}
+.cell:nth-child(2) {
+    border-bottom:2px solid white;
+}
+.cell:nth-child(3) {
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+}
+.cell:nth-child(4){
+    border-right:2px solid white;
+}
+.cell:nth-child(6){
+    border-left: 2px solid white;
+}
+.cell:nth-child(7){
+    border-right: 2px solid white;
+    border-top: 2px solid white;
+}
+.cell:nth-child(8){
+    border-top:2px solid white;
+}
+.cell:nth-child(9){
+    border-left: 2px solid white;
+    border-top: 2px solid white;
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.xCell::before,
+.xCell::after {
+    content: '';
+    position: absolute;
+    width: 0.5rem;
+    height: 2rem;
+    background-color: white;
+    margin: auto;
+}
+.xCell::before{
+    transform: rotate(45deg);
+}
+.xCell::after{
+    transform: rotate(-45deg);
+}
+.circle::before,
+.circle::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    margin: auto;
+}
+.circle::before{
+    width: 2rem;
+    height: 2rem;
+    background-color: white;
+}
+.circle::after {
+    width: 1.0rem;
+    height: 1.0rem;
+    background-color: black;
+}
