@@ -15,15 +15,15 @@ function CreateGame(props) {
     setGameCode(event.target.value);
   };
   return (
-    <div className="flex-col text-xs ">
-      <h1 className="p-3 text-sm ">
+    <div className="flex-col text-2xl md:text-4xl lg:text-4xl">
+      <h1 className="p-3 text-6xl sm:text-8xl">
         Tik Tak Toe
       </h1>
-      <p className="p-1">
+      <p className="p-1 text-4xl">
         Game Code:
         {props.gameCode}
       </p>
-      <p className="h-4">
+      <p className="text-4xl">
         {' '}
         {props.userName}
         {' '}
@@ -42,12 +42,12 @@ function CreateGame(props) {
         Create Game
       </button>
       <p
-        className="md:mr-24 sm:mr-0"
+        className="md:mr-24 sm:mr-0 text-4xl"
       >
         Enter Game Code:
       </p>
       <input
-        className="text-black "
+        className="text-black block m-auto sm:inline-block sm:m-auto"
         id="gamecodeInput"
         type="text"
         onChange={(event) => handleUserInput(event)}
