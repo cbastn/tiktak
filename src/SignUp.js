@@ -7,7 +7,7 @@ function SignUp(props) {
 
   function joinGame() {
     if (props.playerEmpty) {
-      firebase.firestore().collection('games').doc(props.docId).update({
+      firebase.database().ref(props.gameCode).update({
         playerTwo: props.userId,
         userTwo: userName,
       });

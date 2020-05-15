@@ -4,7 +4,7 @@ function Square(props) {
   let filledClass = ' cell ';
   if (props.firstTurn === 0) {
     if (props.square === 0) {
-      filledClass += ' xCell bg-blue-500';
+      filledClass += ' xCell ';
     }
     if (props.square === 1) {
       filledClass += ' circle ';

@@ -7,34 +7,34 @@ function LoadGame(props) {
   const [loading, setLoading] = useState(true);
   const [player, setPlayer] = useState(0);
   const [emptyPlayerTwo, setEmptyPlayerTwo] = useState(false);
-  const [docId, setDocId] = useState('');
 
   useEffect(() => {
-    firebase.firestore().collection('games').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        if (doc.data().gameId === props.gameCode && doc.data().playerOne === props.userId) {
-          setPlayer(1);
-        } else if (doc.data().gameId === props.gameCode && doc.data().playerTwo === props.userId) {
-          setPlayer(2);
-        }
-        if (doc.data().gameId === props.gameCode && doc.data().playerTwo === '') {
-          setEmptyPlayerTwo(true);
-          console.log('player two is empty');
-        }
-        if (doc.data().gameId === props.gameCode) {
-          setDocId(doc.id);
-        }
-      });
+    firebase.database().ref(props.gameCode).once('value').then((snapshot) => {
+      if (snapshot.val().playerOne === props.userId) {
+        setPlayer(1);
+      }
+      if (snapshot.val().playerTwo === props.userId) {
+        setPlayer(2);
+      }
+      if (snapshot.val().playerTwo === '') {
+        setEmptyPlayerTwo(true);
+      }
       setLoading(false);
     });
-  }, [props.userId]);
+  }, []);
 
   function checkPlayers() {
-    console.log(player);
     if (player === 0) {
-      return <SignUp userId={props.userId} playerEmpty={emptyPlayerTwo} docId={docId} setPlayer={setPlayer} />;
+      return (
+        <SignUp
+          userId={props.userId}
+          playerEmpty={emptyPlayerTwo}
+          gameCode={props.gameCode}
+          setPlayer={setPlayer}
+        />
+      );
     }
-    return <Game player={player} docId={docId} turn={props.turn} />;
+    return <Game player={player} gameId={props.gameCode} turn={props.turn} />;
   }
   return (
     <div>

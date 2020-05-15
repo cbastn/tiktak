@@ -18,65 +18,70 @@ function Game(props) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  useEffect(() => {
-    firebase.firestore().collection('games').doc(props.docId).get()
-      .then((doc) => {
-        setTurn(doc.data().userTurn);
-        setFirstTurn(doc.data().firstTurn);
-        setSlots(doc.data().slots);
-      });
-  }, []);
-
-  useEffect(() => {
-    firebase.firestore().collection('games').doc(props.docId).onSnapshot((doc) => {
-      setTurn(doc.data().userTurn);
-      setSlots(doc.data().slots);
-      setMoveX(doc.data().moveX);
-      setMoveO(doc.data().moveO);
-    });
-  }, [turn]);
-  function handleTurn(index) {
-    const changedSlots = [...slots];
-
-    if (props.player === 1 && turn === 0) {
-      changedSlots[index] = 0;
-      const changeMoveX = [...moveX, index];
-      checkWin(changeMoveX);
-      firebase.firestore().collection('games').doc(props.docId).update({
-        userTurn: 1,
-        slots: changedSlots,
-        moveX: changeMoveX,
-      });
-    } else if (props.player === 2 && turn === 1) {
-      changedSlots[index] = 1;
-      const changeMoveO = [...moveO];
-      checkWin(changeMoveO);
-      firebase.firestore().collection('games').doc(props.docId).update({
-        userTurn: 0,
-        slots: changedSlots,
-        moveO: changeMoveO,
-      });
-    } else {
-      console.log('its not your turn');
-    }
-  }
   function checkWin(playerMoves) {
     const result = winCondition.some((combination) => combination.every((number) => playerMoves.includes(number)));
     console.log(result);
     // if result add point to scoreboard
   }
+  useEffect(() => {
+    firebase.database().ref(props.gameId).once('value')
+      .then((snapshot) => {
+        setTurn(snapshot.val().userTurn);
+        setFirstTurn(snapshot.val().firstTurn);
+        setSlots(snapshot.val().slots);
+      });
+  }, []);
+
+  useEffect(() => {
+    firebase.database().ref(props.gameId).on('value', (snapshot) => {
+      setTurn(snapshot.val().userTurn);
+      setSlots(snapshot.val().slots);
+      setMoveO(Object.values(snapshot.val().moveO));
+      setMoveX(Object.values(snapshot.val().moveX));
+    });
+  }, [turn]);
+  function handleTurn(index) {
+    const changedSlots = [...slots];
+    if (changedSlots[index] === 3){
+      if (props.player === 1 && turn === 0) {
+        changedSlots[index] = 0;
+        const changeMoveX = [...moveX, index];
+        checkWin(changeMoveX);
+        firebase.database().ref(props.gameId).update({
+          userTurn: 1,
+          slots: changedSlots,
+          moveX: changeMoveX,
+        });
+      } else if (props.player === 2 && turn === 1) {
+        changedSlots[index] = 1;
+        const changeMoveO = [...moveO, index];
+        checkWin(changeMoveO);
+        firebase.database().ref(props.gameId).update({
+          userTurn: 0,
+          slots: changedSlots,
+          moveO: changeMoveO,
+        });
+      } else {
+        console.log('its not your turn');
+      }
+    }
+  }
+
   function resetGame() {
-    firebase.firestore().collection('games').doc(props.docId).update({
+    const randomTurn = Math.floor(Math.random() * Math.floor(2));
+    setFirstTurn(randomTurn);
+    firebase.database().ref(props.gameId).update({
       slots: Array(9).fill(3, 0, 9),
-      moveX: [],
-      moveO: [],
+      moveX: [false],
+      moveO: [false],
+      firstTurn: randomTurn,
+      userTurn: randomTurn,
     });
   }
   return (
     <div>
       <p>{props.player}</p>
-
+      <p>{firstTurn}</p>
       <button onClick={() => resetGame()}>Reset Game</button>
       <div id="board" className="grid grid-cols-3  m-auto h-32 w-32">
         {/* eslint-disable-next-line max-len */}

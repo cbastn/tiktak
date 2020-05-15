@@ -30,7 +30,7 @@ function App() {
       const newTurn = Math.floor(Math.random() * Math.floor(2));
       setTurn(newTurn);
 
-      firebase.firestore().collection('games').doc().set({
+      firebase.database().ref(path).set({
         gameId: path,
         playerOne: userId,
         playerTwo: '',
@@ -39,32 +39,33 @@ function App() {
         userTurn: newTurn,
         firstTurn: newTurn,
         slots: Array(9).fill(3, 0, 9),
-        moveX: [],
-        moveO: [],
+        moveX: [false],
+        moveO: [false]
       });
     }
   };
   function joinGame(gameCode) {
     let gameExists = false;
-    firebase.firestore().collection('games').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        if (doc.data().gameId === gameCode) {
+    try {
+      firebase.database().ref(gameCode).once('value').then((snapshot) => {
+        if (snapshot.val()){
+          console.log(snapshot.val().gameId);
           setPath(gameCode);
           history.push(`/${gameCode}`);
-          gameExists = true;
+
+        }else{
+          console.log('no game id');
         }
       });
-      if (!gameExists) {
-        console.log('game does not exist');
-        history.push('/');
-      }
-    });
+    } catch (e) {
+      console.log('no game found');
+    };
   }
   useEffect(() => {
     authenticateAnonymously().then((useCredential) => {
       setUserId(useCredential.user.uid);
     });
-  });
+  },[]);
   useEffect(() => {
     generateNumber();
   }, []);
