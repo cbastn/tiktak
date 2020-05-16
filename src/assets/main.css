@@ -14401,8 +14401,8 @@ video {
 .xCell::after {
   content: '';
   position: absolute;
-  width: 0.5rem;
-  height: 2rem;
+  width: 0.75rem;
+  height: 3rem;
   background-color: white;
   margin: auto;
 }
@@ -14424,14 +14424,14 @@ video {
 }
 
 .circle::before{
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   background-color: white;
 }
 
 .circle::after {
-  width: 1.0rem;
-  height: 1.0rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background-color: black;
 }
 

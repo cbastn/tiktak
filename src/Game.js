@@ -42,7 +42,7 @@ function Game(props) {
   }, [turn]);
   function handleTurn(index) {
     const changedSlots = [...slots];
-    if (changedSlots[index] === 3){
+    if (changedSlots[index] === 3) {
       if (props.player === 1 && turn === 0) {
         changedSlots[index] = 0;
         const changeMoveX = [...moveX, index];
@@ -78,12 +78,16 @@ function Game(props) {
       userTurn: randomTurn,
     });
   }
+  function playerTurn() {
+    if (props.player === 1 && turn === 0) return <p>Player 1 Turn</p>;
+    return <p>Player 2 Turn</p>;
+  }
   return (
     <div>
       <p>{props.player}</p>
-      <p>{firstTurn}</p>
+      {playerTurn()}
       <button onClick={() => resetGame()}>Reset Game</button>
-      <div id="board" className="grid grid-cols-3  m-auto h-32 w-32">
+      <div id="board" className="grid grid-cols-3  m-auto h-64 w-64">
         {/* eslint-disable-next-line max-len */}
         {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>
