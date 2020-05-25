@@ -20,21 +20,8 @@ function CreateGame(props) {
         Tik Tak Toe
       </h1>
       <p className="p-1 text-4xl">
-        Game Code:
-        {props.gameCode}
+        Game Code: {props.gameCode}
       </p>
-      <p className="text-4xl">
-        {' '}
-        {props.userName}
-        {' '}
-      </p>
-      <input
-        className="text-black"
-        type="text"
-        name="username"
-        placeholder="Player One"
-        onChange={(event) => { props.setUserName(event.target.value); }}
-      />
       <button
         className="block m-auto mt-2 mb-2 bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-1 px-2 border border-green-500 hover:border-transparent rounded"
         onClick={props.createGame}

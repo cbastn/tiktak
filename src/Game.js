@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
 import Square from './Square';
+import LeftArrow from './img/leftArrow.svg';
+import RightArrow from './img/rightArrow.svg';
 
 function Game(props) {
   const [turn, setTurn] = useState();
@@ -82,16 +84,36 @@ function Game(props) {
     if (props.player === 1 && turn === 0) return <p>Player 1 Turn</p>;
     return <p>Player 2 Turn</p>;
   }
+  function activePlayer() {
+    if (props.player === 1) {
+      return (
+        <div className="inline">
+          <p className="player inline">Player 1 </p>
+          <p className="notPlayer inline">Player 2 </p>
+        </div>
+      );
+    }
+    return (
+      <div className="inline">
+        <p className="notPlayer inline">Player 1 </p>
+        <p className="player inline"> Player 2</p>
+      </div>
+    );
+  }
   return (
-    <div>
-      <p>{props.player}</p>
-      {playerTurn()}
-      <button onClick={() => resetGame()}>Reset Game</button>
+    <>
+      <h1 className="p-3 text-6xl sm:text-8xl">
+        Tik Tak Toe
+      </h1>
+      <img src={RightArrow} className={` w-6 inline ${turn ? '' : 'filter-invert'}`} alt={'user'}/>
+      {activePlayer()}
+      <img src={LeftArrow} className={` w-6 inline ${turn ? 'filter-invert' : ''}`} alt={'user'}/>
       <div id="board" className="grid grid-cols-3  m-auto h-64 w-64">
         {/* eslint-disable-next-line max-len */}
         {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>
-    </div>
+      <button onClick={() => resetGame()}>Reset Game</button>
+    </>
   );
 }
 

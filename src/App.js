@@ -10,7 +10,6 @@ import LoadGame from './LoadGame';
 
 function App() {
   const [userId, setUserId] = useState();
-  const [userName, setUserName] = useState('Player One');
   const [path, setPath] = useState();
   const [turn, setTurn] = useState();
   const history = useHistory();
@@ -22,50 +21,43 @@ function App() {
   }
 
   const createGame = () => {
-    if (userName === undefined || userName === ' ') {
-      // TODO: add popup asking for username
-      console.log('Please enter a username');
-    } else {
-      history.push(`/${path}`);
-      const newTurn = Math.floor(Math.random() * Math.floor(2));
-      setTurn(newTurn);
+    history.push(`/${path}`);
+    const newTurn = Math.floor(Math.random() * Math.floor(2));
+    setTurn(newTurn);
 
-      firebase.database().ref(path).set({
-        gameId: path,
-        playerOne: userId,
-        playerTwo: '',
-        userOne: userName,
-        userTwo: '',
-        userTurn: newTurn,
-        firstTurn: newTurn,
-        slots: Array(9).fill(3, 0, 9),
-        moveX: [false],
-        moveO: [false]
-      });
-    }
+    firebase.database().ref(path).set({
+      gameId: path,
+      playerOne: userId,
+      playerTwo: '',
+      userOne: 'Player One',
+      userTwo: '',
+      userTurn: newTurn,
+      firstTurn: newTurn,
+      slots: Array(9).fill(3, 0, 9),
+      moveX: [false],
+      moveO: [false],
+    });
   };
   function joinGame(gameCode) {
-    let gameExists = false;
     try {
       firebase.database().ref(gameCode).once('value').then((snapshot) => {
-        if (snapshot.val()){
+        if (snapshot.val()) {
           console.log(snapshot.val().gameId);
           setPath(gameCode);
           history.push(`/${gameCode}`);
-
-        }else{
+        } else {
           console.log('no game id');
         }
       });
     } catch (e) {
       console.log('no game found');
-    };
+    }
   }
   useEffect(() => {
     authenticateAnonymously().then((useCredential) => {
       setUserId(useCredential.user.uid);
     });
-  },[]);
+  }, []);
   useEffect(() => {
     generateNumber();
   }, []);
@@ -82,8 +74,6 @@ function App() {
             gameCode={path}
             joinGame={joinGame}
             createGame={createGame}
-            setUserName={setUserName}
-            userName={userName}
           />
         </Route>
         <Route path={`/${path}`} exact>
