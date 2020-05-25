@@ -80,24 +80,33 @@ function Game(props) {
       userTurn: randomTurn,
     });
   }
-  function playerTurn() {
-    if (props.player === 1 && turn === 0) return <p>Player 1 Turn</p>;
-    return <p>Player 2 Turn</p>;
+  const shareData = {
+    title: 'MDN',
+    text: 'Learn web development on MDN!',
+    url: 'https://developer.mozilla.org',
+  };
+  async function handleShare() {
+    try {
+      await navigator.share(shareData);
+      console.log('shared');
+    } catch (e) {
+      console.log(e);
+    }
   }
   function activePlayer() {
     if (props.player === 1) {
       return (
-        <div className="inline">
-          <p className="player inline">Player 1 </p>
-          <p className="notPlayer inline">Player 2 </p>
-        </div>
+        <>
+          <p className="player inline text-2xl p-2">Player 1 </p>
+          <p className="notPlayer inline text-2xl p-2">Player 2 </p>
+        </>
       );
     }
     return (
-      <div className="inline">
-        <p className="notPlayer inline">Player 1 </p>
-        <p className="player inline"> Player 2</p>
-      </div>
+      <>
+        <p className="notPlayer inline text-2xl p-2">Player 1 </p>
+        <p className="player inline text-2xl p-2"> Player 2</p>
+      </>
     );
   }
   return (
@@ -105,14 +114,16 @@ function Game(props) {
       <h1 className="p-3 text-6xl sm:text-8xl">
         Tik Tak Toe
       </h1>
-      <img src={RightArrow} className={` w-6 inline ${turn ? '' : 'filter-invert'}`} alt={'user'}/>
-      {activePlayer()}
-      <img src={LeftArrow} className={` w-6 inline ${turn ? 'filter-invert' : ''}`} alt={'user'}/>
+      <div className="relative">
+        <img src={RightArrow} className={` align-text-bottom w-6 inline ${turn ? '' : 'filter-invert'}`} alt="user" />
+        {activePlayer()}
+        <img src={LeftArrow} className={` align-text-bottom w-6 inline ${turn ? 'filter-invert' : ''}`} alt="user" />
+      </div>
       <div id="board" className="grid grid-cols-3  m-auto h-64 w-64">
         {/* eslint-disable-next-line max-len */}
         {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>
-      <button onClick={() => resetGame()}>Reset Game</button>
+      <button onClick={() => handleShare()}>Share</button>
     </>
   );
 }
