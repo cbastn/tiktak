@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import Square from './Square';
 import LeftArrow from './img/leftArrow.svg';
 import RightArrow from './img/rightArrow.svg';
+import ShareButton from "./ShareButton";
 
 function Game(props) {
   const [turn, setTurn] = useState();
@@ -80,19 +81,6 @@ function Game(props) {
       userTurn: randomTurn,
     });
   }
-  const shareData = {
-    title: 'MDN',
-    text: 'Learn web development on MDN!',
-    url: 'https://developer.mozilla.org',
-  };
-  async function handleShare() {
-    try {
-      await navigator.share(shareData);
-      console.log('shared');
-    } catch (e) {
-      console.log(e);
-    }
-  }
   function activePlayer() {
     if (props.player === 1) {
       return (
@@ -123,7 +111,7 @@ function Game(props) {
         {/* eslint-disable-next-line max-len */}
         {slots.map((square, index) => <Square key={index} index={index} handleTurn={handleTurn} square={square} firstTurn={firstTurn} />)}
       </div>
-      <button onClick={() => handleShare()}>Share</button>
+      <ShareButton gameId={props.gameId}/>
     </>
   );
 }
