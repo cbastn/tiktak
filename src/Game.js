@@ -48,7 +48,7 @@ function Game(props) {
     // if result add point to scoreboard
     if (moveX.length === 5 && moveO.length === 5 && result === false) {
       firebase.database().ref(props.gameId).update({
-        DrawGame: true,
+        drawGame: true,
       });
       setTimeout(resetGame, 3000);
     }
