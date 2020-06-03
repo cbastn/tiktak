@@ -3,7 +3,6 @@ import {
   Switch, Route, useHistory, useLocation,
 } from 'react-router-dom';
 import firebase, { authenticateAnonymously } from './firebase';
-import './App.css';
 import CreateGame from './CreateGame';
 import LoadGame from './LoadGame';
 
@@ -36,13 +35,14 @@ function App() {
       slots: Array(9).fill(3, 0, 9),
       moveX: [false],
       moveO: [false],
+      winner: false,
+      drawGame: false,
     });
   };
   function joinGame(gameCode) {
     try {
       firebase.database().ref(gameCode).once('value').then((snapshot) => {
         if (snapshot.val()) {
-          console.log(snapshot.val().gameId);
           setPath(gameCode);
           history.push(`/${gameCode}`);
         } else {

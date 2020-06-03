@@ -34,7 +34,7 @@ function CreateGame(props) {
         Enter Game Code:
       </p>
       <input
-        className="text-black block m-auto sm:inline-block sm:m-auto"
+        className="text-black block m-auto sm:inline-block sm:m-auto mb-3"
         id="gamecodeInput"
         type="text"
         onChange={(event) => handleUserInput(event)}
