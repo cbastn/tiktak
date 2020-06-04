@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import gitIcon from './img/github.svg';
 
 function CreateGame(props) {
   const [gameCode, setGameCode] = useState();

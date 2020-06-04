@@ -5,6 +5,7 @@ import {
 import firebase, { authenticateAnonymously } from './firebase';
 import CreateGame from './CreateGame';
 import LoadGame from './LoadGame';
+import gitIcon from "./img/github.svg";
 
 
 function App() {
@@ -80,6 +81,10 @@ function App() {
           <LoadGame turn={turn} setTurn={setTurn} gameCode={path} userId={userId} />
         </Route>
       </Switch>
+      <a className="mt-8" href="https://github.com/cbastn/tiktak">
+        <img className="filter-invert m-auto" src={gitIcon} alt="Github" />
+        <p>View On Github</p>
+      </a>
     </div>
   );
 }
